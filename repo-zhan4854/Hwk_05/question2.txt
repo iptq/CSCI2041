@@ -1,0 +1,39 @@
+Given:
+
+foldr f [] v = v
+foldr f (x::xs) v = f x (foldr f xs v)
+
+foldl f v [] = v
+foldl f v (x::xs) = foldl f (f v x) xs
+
+and b1 b2 = if b1 then b2 else false
+
+andl l = foldl and true l
+andr l = foldr and l true
+
+Evaluate:
+
+andl (true::false::true::true::[])
+
+Call by Name:
+
+andl (true::false::true::true::[])
+= foldl and true (true::false::true::true::[])
+= foldl and (and and true true) (false::true::true::[])
+= foldl and (and (and true true) false) (true::true::[])
+= foldl and (and (and (and true true) false) true) (true::[])
+= foldl and (and (and (and (and true true) false) true) true) []
+= and (and (and (and true true) false) true) true
+= if (and (and (and true true) false) true) then true else false
+= if (if (and (and true true) false) then true else false) then true else false
+= if (if (if (and true true) then false else false) then true else false) then true else false
+= if (if (if (if true then true else false) then false else false) then true else false) then true else false
+= if (if (if true then false else false) then true else false) then true else false
+= if (if false then true else false) then true else false
+= if false then true else false
+= false
+
+Call by Value:
+
+andl (true::false::true::true::[])
+= 

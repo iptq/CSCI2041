@@ -1,0 +1,7 @@
+
+Exercise #3:
+
+Write a function named cond that has the same behavior as OCaml’s
+if-then-else construct. 
+
+let cond c t f = if c then t else f

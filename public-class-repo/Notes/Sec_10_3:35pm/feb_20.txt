@@ -1,0 +1,114 @@
+let rec sum = function
+  | [] -> 0
+  | x:xs -> x + sum xs
+
+P(l1, l2): sum (l1 @ l2) = sum l1 + sum l2
+
+P(l1) : \forall l2 in int list .  sum (l1 @ l2) = sum l1 + sum l2
+
+Base case :  l1 = []
+--------------------
+
+\forall l2 in int list .  (
+
+  sum ([] @ l2) 
+
+= sum l2, properties of append and lists
+
+= 0 + sum l2, properties of addition
+
+= sum [] + sum l2, by def of sum
+
+)
+
+
+Inductive case : l1 = h::t
+--------------------
+show:  \forall l2 in int list .  sum ((h::t) @ l2) = sum (h::t) + sum l2
+
+given: \forall l2 in int list .  sum (t @ l2) = sum t + sum l2
+
+\forall l2 in int list .  
+
+  sum ((h::t) @ l2) 
+
+= sum ( h :: (t @ l2) ),  properties of lists and append
+
+= h + sum ( t @ l2 ), by def. of sum
+
+= h + sum t + sum l2, by inductive hypothesis
+
+= sum (h::t) + sum l2, by def. sum
+
+)
+
+
+
+------------------------------------------------------------
+
+let rec reverse l = match l with
+  | [ ] -> [ ]
+  | x::xs -> reverse xs @ [x]
+
+
+P(l1, l2):  reverse (l1 @ l2) = reverse l2 @ reverse l1
+
+Induction over l1.
+
+Base case:
+----------
+P([], l2):  reverse (l1 @ l2) = reverse l2 @ reverse l1
+
+  reverse ([] @ l2) 
+
+= reverse l2, by properties of append and lists
+
+= reverse l2 @ [],  by properties of append and lists
+
+= reverse l2 @ reverse [], by def. of reverse
+
+
+
+Inductive case
+--------------
+P( (h::t, l2):
+
+show:  reverse ((h::t) @ l2) = reverse l2 @ reverse (h::t)
+given: reverse (t @ l2) = reverse l2 @ reverse t
+
+  reverse ((h::t) @ l2) 
+
+= reverse ( h :: ( t @ l2 ) ), by properties of append and lists
+
+= reverse ( t @ l2 ) @ [h], by def. of reverse
+
+= reverse l2 @ reverse t @ [h], by inductive hypothesis
+
+= reverse l2 @ (reverse t @ [h]), by associtativity of append
+
+= reverse l2 @ reverse (h::t), by def. of reverese
+
+
+--------------------------------------------------
+let rec place e l = match l with
+  | [ ] -> [e]
+  | x::xs -> if e < x then e::x::xs
+             else x :: (place e xs)
+let rec is_elem e l = match l with
+  | [ ] -> false
+  | x::xs -> e = x || (e > x && is_elem e xs)
+
+
+P(e, l) :  is_elem e (place e l)
+
+Induction over l.
+
+Base:
+  is_elem e (place e []) 
+= is_elem e [e], by def. of place
+= e = e || (e > e && is_elem e []), by def is_elem
+= true, because e = e
+
+Inductive case:
+
+... exercise for the reader ...

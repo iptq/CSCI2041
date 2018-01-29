@@ -1,0 +1,13 @@
+.*
+!.gitignore
+!.merlin
+
+*.cmi
+*.cmo
+
+_build/
+main.byte
+main.native
+out/
+setup.data
+setup.log

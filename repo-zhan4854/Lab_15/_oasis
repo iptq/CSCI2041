@@ -1,0 +1,14 @@
+# After editing this file, remember to re-run `oasis setup'!!!
+
+OASISFormat: 0.4
+Name:        Hwk_04
+Version:     0.1.0
+Synopsis:    The fourth homework assignment for CSCI2041.
+Authors:     Nathaniel Ringo <ringo025@umn.edu>
+License:     MIT
+Executable "Hwk_04"
+  Path:           src
+  BuildTools:     ocamlbuild
+  BuildTools+:    ocamlyacc, ocamllex
+  CompiledObject: best
+  MainIs:         main.ml

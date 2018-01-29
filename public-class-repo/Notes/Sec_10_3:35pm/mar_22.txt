@@ -1,0 +1,10 @@
+Exercise #3:
+
+Write a function named cond that has the same behavior as OCaml’s
+if-then-else construct. 
+
+let cond a b c = match a with
+                 | True -> b
+                 | False -> c
+
+let cond a b c = if a then b else c

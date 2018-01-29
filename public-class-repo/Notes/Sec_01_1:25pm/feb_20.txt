@@ -1,0 +1,108 @@
+let rec sum = function
+  | [] -> 0
+  | x:xs -> x + sum xs
+
+P(l1, l2): sum (l1 @ l2) = sum l1 + sum l2
+
+P(l1) : \forall l2 in 'a list . 
+     sum (l1 @ l2) = sum l1 + sum l2
+
+Base case:  l1 = [] 
+----------
+
+P([]) : 
+\forall l2 in 'a list . (
+
+  sum ([] @ l2) 
+
+= sum l2,  by properties of lists and append 
+
+= 0 + sum l2, by properties of aritmetic
+
+= sum [] + sum l2, by def of sum
+
+)
+
+Inductive case:  l1 = h::t
+---------------
+show:  P(h::t) : \forall l2 in 'a list . 
+          sum ((h::t) @ l2) = sum (h::t) + sum l2
+
+given: P(t) : \forall l2 in 'a list . 
+          sum (t @ l2) = sum t + sum l2
+
+\forall l2 in 'a list . (
+
+  sum ((h::t) @ l2) 
+
+= sum ( h :: (t @ l2 ) ), by properties of lists and append
+
+= h + sum ( t @ l2 ), by def of sum
+
+= h + sum t + sum l2, by inductive hypothesis
+
+= sum (h::t) + sum l2, by def of sum
+
+)
+
+
+----------------------------------------------------------------------
+
+
+let rec reverse l = match l with
+  | [ ] -> [ ]
+  | x::xs -> reverse xs @ [x]
+
+P(l1, l2):  reverse (l1 @ l2) = reverse l2 @ reverse l1
+
+Induction over l1.
+
+Base case: l1 = []
+----------
+
+  reverse ([] @ l2) 
+
+= reverse l2, by properties of append and lists
+
+= reverse l2 @ [], by properites of empty lists
+
+= reverse l2 @ reverse [], by def. of reverse
+
+Inductive case: l1 = h::t
+-----------
+given: reverse (t @ l2) = reverse l2 @ reverse t
+
+  reverse (h::t @ l2)
+
+= reverse (h :: (t @ l2)), by properties of lists and append
+
+= reverse (t @ l2)  @  [h], by def. of reverse
+
+= reverse l2 @ rerverse t @ [ h ], by ind. hypo.
+
+= reverse l2 @ reverse (h::t), by def. of reverse
+
+------------------------------------------------------------
+
+
+P(e, l): is_elem e (place e l)
+
+Induction over l
+
+Base case: l = []
+
+  is_elem e (place e [])
+
+= is_elem e [e], by def of place
+
+= (e = e || e > e && is_elem e []), by def of is_elem
+
+= true, by properties of equality.
+
+
+Inductive case:  l = h::t
+show:  is_elem e (place e (h::t))
+
+given: is_elem e (place e t)
+
+... exercise for the reader ....

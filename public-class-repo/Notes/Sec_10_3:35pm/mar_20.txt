@@ -1,0 +1,79 @@
+
+double x = x + x
+
+double (fact 10)
+
+-- eagerly- call by value
+double (fact 10)
+double 3628800
+3628800 + 3628800
+7257600
+
+-- call-by-name
+double (fact 10)
+(fact 10) + (fact 10)
+3628800 + (fact 10)
+3628800 + 3628800
+7257600
+
+-- call-by-need , lazy evaluation
+double (fact 10)
+x + x where x = fact 10
+x + x where x = 3628800
+3628800 + 3628800
+7257600
+
+
+
+-- An exercise from class --
+
+ take 2 (makefrom 4 5)
+
+Use the following definitions (clearly not OCaml syntax):
+
+take n [] = []
+take 0 (x::xs) = []
+take n (x::xs) = x::take (n-1) xs
+
+makefrom 0 v = []
+makefrom n v = v :: makefrom (n-1) (v+1)
+
+-- call-by-need
+  take 2 (makefrom 4 5)
+= take 2 (5 :: makefrom (4-1) (5+1))
+= 5 :: take (2-1) (makefrom (4-1) (5+1))
+= 5 :: take (2-1) (makefrom 3 (5+1))
+= 5 :: take (2-1) (v :: makefrom (3-1) (v+1)) where v = 5+1
+= 5 :: take 1 (v :: makefrom (3-1) (v+1)) where v = 5+1
+= 5 :: v :: take (1-1) (makefrom (3-1) (v+1))  where v = 5+1
+= 5 :: v :: take (1-1) (makefrom (3-1) (v+1))  where v = 6
+= 5 :: 6 :: take (1-1) (makefrom (3-1) (6+1)) 
+= 5 :: 6 :: take (1-1) (makefrom 2 (6+1)) 
+= 5 :: 6 :: take (1-1) (v :: makefrom (2-1) (v+1)) where v = 6+1
+= 5 :: 6 :: take 0 (v :: makefrom (2-1) (v+1)) where v = 6+1
+= 5 :: 6 :: []
+
+
+
+
+
+-- call-by-value
+  take 2 (makefrom 4 5)
+= take 2 (5 :: makefrom (4-1) (5+1))
+= take 2 (5 :: makefrom 3 (5+1))
+= take 2 (5 :: makefrom 3 6)
+= take 2 (5 :: 6 :: makefrom (3-1) (6+1))
+= take 2 (5 :: 6 :: makefrom 2 (6+1))
+= take 2 (5 :: 6 :: makefrom 2 7)
+= take 2 (5 :: 6 :: 7 :: makefrom (2-1) (7+1))
+= take 2 (5 :: 6 :: 7 :: makefrom 1 (7+1))
+= take 2 (5 :: 6 :: 7 :: makefrom 1 8)
+= take 2 (5 :: 6 :: 7 :: 8 :: makefrom (1-1) (8+1))
+= take 2 (5 :: 6 :: 7 :: 8 :: makefrom 0 (8+1))
+= take 2 (5 :: 6 :: 7 :: 8 :: makefrom 0 9)
+= take 2 (5 :: 6 :: 7 :: 8 :: [])
+= 5 :: take (2-1) (6 :: 7 :: 8 :: [])
+= 5 :: take 1 (6 :: 7 :: 8 :: [])
+= 5 :: 6 :: take (1-1) (7 :: 8 :: [])
+= 5 :: 6 :: take 0 (7 :: 8 :: [])
+= 5 :: 6 :: []

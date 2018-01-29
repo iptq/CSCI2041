@@ -1,0 +1,83 @@
+Given:
+
+sum [] = 0
+sum x::xs -> x + sum xs
+
+take 0 lst = [ ]
+take n [ ] = [ ]
+take n (x::xs) = x::take (n-1) xs
+
+some_squares_from 0 v = [ ]
+some_squares_from n v = v*v :: some_squares_from (n-1) (v+1)
+
+Evaluate:
+
+sum (take 3 (some_squares_from 5 1))
+
+Call by Value:
+
+sum (take 3 (some_squares_from 5 1))
+= sum (take 3 (1 * 1 :: some_squares_from 4 2))
+= sum (take 3 (1 :: some_squares_from 4 2))
+= sum (take 3 (1 :: 2 * 2 :: some_squares_from 3 3))
+= sum (take 3 (1 :: 4 :: some_squares_from 3 3))
+= sum (take 3 (1 :: 4 :: 3 * 3 :: some_squares_from 2 4))
+= sum (take 3 (1 :: 4 :: 9 :: some_squares_from 2 4))
+= sum (take 3 (1 :: 4 :: 9 :: 4 * 4 :: some_squares_from 1 5))
+= sum (take 3 (1 :: 4 :: 9 :: 16 :: some_squares_from 1 5))
+= sum (take 3 (1 :: 4 :: 9 :: 16 :: 5 * 5 :: some_squares_from 0 6))
+= sum (take 3 (1 :: 4 :: 9 :: 16 :: 25 :: some_squares_from 0 6))
+= sum (take 3 (1 :: 4 :: 9 :: 16 :: 25 :: []))
+= sum (1 :: take 2 (4 :: 9 :: 16 :: 25 :: []))
+= sum (1 :: 4 :: take 1 (9 :: 16 :: 25 :: []))
+= sum (1 :: 4 :: 9 :: take 0 (16 :: 25 :: []))
+= sum (1 :: 4 :: 9 :: [])
+= 1 + sum (4 :: 9 :: [])
+= 1 + 4 + sum (9 :: [])
+= 5 + sum (9 :: [])
+= 5 + 9 + sum []
+= 14 + sum []
+= 14 + 0
+= 14
+
+Call by Name:
+
+sum (take 3 (some_squares_from 5 1))
+= sum (take 3 (1 * 1 :: some_squares_from 4 2))
+= sum (1 * 1 :: take 2 (some_squares_from 4 2))
+= 1 * 1 + sum (take 2 (some_squares_from 4 2))
+= 1 + sum (take 2 (some_squares_from 4 2))
+= 1 + sum (take 2 (2 * 2 :: some_squares_from 3 3))
+= 1 + sum (2 * 2 :: take 1 (some_squares_from 3 3))
+= 1 + 2 * 2 + sum (take 1 (some_squares_from 3 3))
+= 1 + 4 + sum (take 1 (some_squares_from 3 3))
+= 5 + sum (take 1 (some_squares_from 3 3))
+= 5 + sum (take 1 (3 * 3 :: some_squares_from 2 4))
+= 5 + sum (3 * 3 :: take 0 (some_squares_from 2 4))
+= 5 + 3 * 3 + sum (take 0 (some_squares_from 2 4))
+= 5 + 9 + sum (take 0 (some_squares_from 2 4))
+= 14 + sum (take 0 (some_squares_from 2 4))
+= 14 + sum []
+= 14 + 0
+= 14
+
+Lazy Evaluation:
+
+sum (take 3 (some_squares_from 5 1))
+= sum (take 3 (1 * 1 :: some_squares_from (5 - 1) (1 + 1)))
+= sum (1 :: take 2 (some_squares_from (5 - 1) v)), where v = (1 + 1)
+= 1 + sum (take 2 (some_squares_from 4 v)), where v = (1 + 1)
+= 1 + sum (take 2 (v * v :: some_squares_from (4 - 1) (v + 1))), where v = (1 + 1)
+= 1 + sum (v * v :: take 1 (some_squares_from (4 - 1) (v + 1))), where v = (1 + 1)
+= 1 + v * v + sum (take 1 (some_squares_from (4 - 1) (v + 1))), where v = (1 + 1)
+= 1 + 4 + sum (take 1 (some_squares_from 3 (2 + 1)))
+= 5 + sum (take 1 (some_squares_from 3 (2 + 1)))
+= 5 + sum (take 1 (some_squares_from 3 v)), where v = (2 + 1)
+= 5 + sum (take 1 (v * v :: some_squares_from (3 - 1) (v + 1))), where v = (2 + 1)
+= 5 + sum (v * v :: take 0 (some_squares_from (3 - 1) (v + 1))), where v = (2 + 1)
+= 5 + v * v + sum (take 0 (some_squares_from (3 - 1) (v + 1))), where v = (2 + 1)
+= 5 + 9 + sum (take 0 (some_squares_from 2 (3 + 1)))
+= 14 + sum (take 0 (some_squares_from 2 (3 + 1)))
+= 14 + sum []
+= 14 + 0
+= 14

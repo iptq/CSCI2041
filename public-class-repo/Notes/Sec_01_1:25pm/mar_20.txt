@@ -1,0 +1,59 @@
+
+double x = x + x
+
+double (fact 10)
+
+-- eagerly- call by value
+double (fact 10)
+double 3628800
+3628800 + 3628800
+7257600
+
+-- call-by-name
+double (fact 10)
+(fact 10) + (fact 10)
+3628800 + (fact 10)
+3628800 + 3628800
+7257600
+
+-- call-by-need , lazy evaluation
+double (fact 10)
+x + x where x = fact 10
+x + x where x = 3628800
+3628800 + 3628800
+7257600
+
+
+
+take 2 (makefrom 4 15)
+
+Use the following definitions (clearly not OCaml syntax):
+
+take n [] = []
+take 0 (x::xs) = []
+take n (x::xs) = x::take (n-1) xs
+
+makefrom 0 v = []
+makefrom n v = v :: makefrom (n-1) (v+1)
+
+-- call by name --
+  take 2 (makefrom 4 15)
+= take 2 (15::makefrom (4-1) (15+1))
+= 15::take (2-1) (makefrom (4-1) (15+1))
+= 15::take (2-1) (makefrom 3 (15+1))
+= 15::take (2-1) ((15+1)::makefrom(3-1) ((15+1)+1))
+= 15::take 1 ((15+1)::makefrom(3-1) ((15+1)+1))
+= 15::(15+1)::take (1-1) (makefrom(3-1) ((15+1)+1))
+
+-- call by value --
+  take 2 (makefrom 4 15)
+= take 2 (15::makefrom (4-1) (15+1))
+= take 2 (15::makefrom 3 16)
+= take 2 (15::16::makefrom 2 17)
+= take 2 (15::16::17::makefrom 1 18)
+= take 2 (15::!6::17::18::makefrom 0 19)
+= take 2 (15::16::17::18::[])
+= 15::take 1 (16::17::18::[])
+= 15::16::(take 0 17::18::[])
+= 15::16::[]
+-- don't skip steps, things like 3+1 need to be evaluated properly

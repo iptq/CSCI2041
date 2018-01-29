@@ -1,0 +1,12 @@
+function foo(x : int) =
+    x + 1;
+
+function bar(y : int) =
+    y * 3;
+
+function baz(x : int, y : int) =
+    let a = foo(x / 2) in
+    let b = bar(y) in
+    a * (2 + b);
+
+baz(4, 2)

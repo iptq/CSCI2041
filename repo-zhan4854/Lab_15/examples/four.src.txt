@@ -1,0 +1,15 @@
+function add(x : int, y : int) =
+    x + y;
+
+function sum_array(arr : int[]) =
+    fold(add, arr);
+
+function process(arr : int[]) =
+    sum_array(arr);
+
+process([
+    1, 1, 1, 1,
+    1, 1, 1, 1,
+    1, 1, 1, 1,
+    1, 1, 1, 1,
+])

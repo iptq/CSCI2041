@@ -1,0 +1,20 @@
+### Starting build.
+# Target: hwk_07.ml.depends, tags: { extension:ml, file:hwk_07.ml, ocaml, ocamldep, quiet }
+/usr/bin/ocamldep -modules hwk_07.ml > hwk_07.ml.depends
+# Target: complexVector.ml.depends, tags: { extension:ml, file:complexVector.ml, ocaml, ocamldep, quiet }
+/usr/bin/ocamldep -modules complexVector.ml > complexVector.ml.depends # cached
+# Target: vector.ml.depends, tags: { extension:ml, file:vector.ml, ocaml, ocamldep, quiet }
+/usr/bin/ocamldep -modules vector.ml > vector.ml.depends # cached
+# Target: vector.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:vector.cmo, file:vector.ml, implem, ocaml, quiet }
+/usr/bin/ocamlc -c -o vector.cmo vector.ml # cached
+# Target: complexVector.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:complexVector.cmo, file:complexVector.ml, implem, ocaml, quiet }
+/usr/bin/ocamlc -c -o complexVector.cmo complexVector.ml # cached
+# Target: intVector.ml.depends, tags: { extension:ml, file:intVector.ml, ocaml, ocamldep, quiet }
+/usr/bin/ocamldep -modules intVector.ml > intVector.ml.depends # cached
+# Target: intVector.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:intVector.cmo, file:intVector.ml, implem, ocaml, quiet }
+/usr/bin/ocamlc -c -o intVector.cmo intVector.ml # cached
+# Target: hwk_07.cmo, tags: { byte, compile, extension:cmo, extension:ml, file:hwk_07.cmo, file:hwk_07.ml, implem, ocaml, quiet }
+/usr/bin/ocamlc -c -o hwk_07.cmo hwk_07.ml
+# Target: hwk_07.byte, tags: { byte, dont_link_with, extension:byte, file:hwk_07.byte, link, ocaml, program, quiet }
+/usr/bin/ocamlc vector.cmo complexVector.cmo intVector.cmo hwk_07.cmo -o hwk_07.byte
+# Compilation successful.

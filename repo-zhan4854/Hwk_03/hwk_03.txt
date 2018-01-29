@@ -1,0 +1,257 @@
+
+
+    **  Michael  Zhang  **
+    **                  **
+    **     zhan4854     **
+
+
+
+  ~.* Question 1. *.~
+
+let rec power n x =
+  match n with
+  | 0 -> 1.0
+  | _ -> x *. power (n-1) x
+
+Prove that:
+  power n x = x ^ n
+
+--- Properties ---
+
+[1] x ^ (n + 1) = x * x ^ n, because that's how math works
+
+--- Base Case: n = 0 ---
+
+P(0, x) = 1.0, by the definition of power
+x ^ 0 = 1.0, because that's how math works
+
+1.0 == 1.0, so P(n, x) = x ^ n for n = 0
+
+--- Inductive Case: n > 1 ---
+
+Given: P(n, x) = x ^ n
+Show: P(n + 1, x) = x ^ (n + 1)
+
+P(n, x) = x ^ n, given
+x * P(n, x) = x * x ^ n, multiplying both sides by x
+x * P(n, x) = x ^ (n + 1), by property [1]
+P(n + 1, x) = x ^ (n + 1), by the definition of power
+
+∴ power n x = x ^ n, for all natural numbers n
+
+
+
+  ~.* Question 2 *.~
+
+type nat = Zero | Succ of nat
+
+let toInt = function
+  | Zero -> 0
+  | Succ n -> toInt n + 1
+
+let rec power n x =
+  match n with
+  | Zero -> 1.0
+  | Succ n' -> x *. power n' x
+
+Based on the usage of nat in toInt and power, we can reliably
+infer that a property of nat will also apply to Succ of nat,
+which essentially equals nat + 1.
+
+Prove that:
+  power n x = x ^ toInt(n), for all nat n
+
+--- Properties ---
+
+[1] x ^ (n + 1) = x * x ^ n, because that's how math works
+
+--- Base Case: n = Zero ---
+
+P(Zero, x) = 1.0, by the definition of power
+x ^ toInt(Zero) = x ^ 0, by the definition of toInt
+x ^ 0 = 1.0, because that's how math works
+
+1.0 == 1.0, so P(n, x) = x ^ toInt(n) for n = Zero
+
+--- Inductive Case: n = Succ of n' ---
+
+Given: P(n, x) = x ^ toInt(n)
+Show: P(Succ n, x) = x ^ toInt(Succ n)
+
+P(n, x) = x ^ toInt(n), given
+x * P(n, x) = x * x ^ toInt(n), multiplying both sides by x
+x * P(n, x) = x ^ (toInt(n) + 1), by property [1]
+x * P(n, x) = x ^ toInt(Succ n), by the definition of toInt
+P(Succ n, x) = x ^ toInt(Succ n), by the definition of power
+
+∴ power n x = x ^ toInt(n)
+
+
+
+  ~.* Question 3 *.~
+
+let rec length = function
+  | [] -> 0
+  | x:xs -> 1 + length xs
+
+A list is always comprised of a head element and another list
+(with the exception of the empty list, which is a special case).
+Because on the recursive nature of list, we can reliably infer
+that inductive properties of any list will also apply to the
+child list of that list.
+
+Prove that:
+  length (l @ r) = length l + length r
+
+--- Properties ---
+
+[1] [] @ x = x, because empty list is empty
+[2] (l1 @ l2) @ l3 = l1 @ (l2 @ l3), because @ is like + but for lists
+[3] x::xs = [x] @ xs, because that's how it works
+
+--- Base Case: l = [] ---
+
+length([] @ r) = length(r), by property [1]
+length([]) + length(r) = 0 + length(r), by the definition of length
+0 + length(r) = length(r), because identity property of 0
+
+length r == length r, so length(l @ r) = length(l) + length(r) for l = []
+
+--- Inductive Case: l = hd::tl ---
+
+Given: length(l @ r) = length(l) + length(r)
+Prove: length((el::l) @ r) = length(el::l) + length(r)
+
+LET x = [el]
+
+length(l @ r) = length(l) + length(r), given
+length(x @ (l @ r)) = length(x) + (length(l) + length(r)), applying property again
+length((x @ l) @ r) = length(x) + (length(l) + length(r)), by property [2]
+length((x @ l) @ r) = length(x @ l) + length(r), by the given
+length((el::l) @ r) = length(el::l) + length(r), substituting x @ l for el::l
+
+∴ length (l @ r) = length l + length r
+
+
+
+  ~.* Question 4 *.~
+
+let rec reverse l =
+  match l with
+  | [] -> []
+  | x::xs -> reverse xs @ [x]
+
+Prove that:
+  length (reverse l) = length l
+
+--- Base Case: l = [] ---
+
+length (reverse []) = length [], by the definition of reverse
+length [] = 0, by the definition of length
+
+Since 0 == 0, length (reverse l) = length l, for l = []
+
+--- Inductive Case: l = hd::tail ---
+
+Given: length (reverse l) = length l
+Prove: length (reverse (el::l)) = length (el::l)
+
+length (reverse l) = length l, given
+length (reverse l) + 1 = length l + 1, adding 1 to both sides
+length ((reverse l) @ [el]) = length l + 1, equivalent because appending an element gives length + 1
+length (reverse (el::l)) = length l + 1, by the definition of reverse
+length (reverse (el::l)) = length (el::l), equivalent because prepending an element gives length + 1
+
+∴ length (reverse (el::l)) = length (el::l)
+
+
+
+  ~.* Question 5 *.~
+
+let rec append l1 l2 = 
+  match l1 with
+  | [] -> l2
+  | (h::t) -> h :: (append t l2)
+
+Prove that:
+  reverse (append l1 l2) = append (reverse l2) (reverse l1)
+
+--- Properties ---
+
+[1] append l1 l2 = l1 @ l2
+  Proof:
+    Base Case: l1 = []
+      append [] l2 = l2 (by definition of append), and [] @ l2 = l2
+    Inductive Case: l1 = (h::t)
+      Given that append l1 l2 = l1 @ l2
+      Prove that append (h::l1) l2 = (h::l1) @ l2
+        append (h::l1) l2 = h::(append l1 l2) = h::(l1 @ l2) = [h] @ (l1 @ l2)
+        (h::l1) @ l2 = ([h] @ l1) @ l2 = [h] @ (l1 @ l2)
+[2] a :: b = [a] @ b
+[3] [a] @ reverse (b) = reverse (b @ [a]), working backwards from the definition from reverse
+  Proof:
+    Base Case: b = []
+      [a] @ reverse [] = [a] @ [] = [a]
+      reverse ([] @ [a]) = reverse [a] = [a]
+    Inductive Case: l1 = (h::t)
+      Given that [a] @ reverse b = reverse (b @ [a])
+      Prove that [a] @ reverse (c::b) = reverse ((c::b) @ [a])
+        [a] @ reverse (c::b) = [a] @ reverse b @ [c]
+        reverse ((c::b) @ [a]) = reverse ([c] @ b @ [a]) = reverse (c :: (b @ [a]))
+          = reverse (b @ [a]) @ [c] = [a] @ reverse b @ [c]
+
+
+--- Base Case: l1 = [] ---
+
+reverse (append [] l2) = append (reverse l2) (reverse [])
+reverse l2 = append (reverse l2) (reverse []), by definition of append
+reverse l2 = append (reverse l2) [], by definition of reverse
+reverse l2 = (reverse l2) @ [], by property [1]
+reverse l2 = reverse l2, because that's how it works
+
+reverse (append l1 l2) = append (reverse l2) (reverse l1), for l1 = []
+
+--- Inductive Case: l1 = hd::tl ---
+
+Given: reverse (append l1 l2) = append (reverse l2) (reverse l1)
+Prove: reverse (append (hd::l1) l2) = append (reverse l2) (reverse (hd::l1))
+
+reverse (append l1 l2) = append (reverse l2) (reverse l1)
+reverse (l1 @ l2) = (reverse l2) @ (reverse l1), by property [1]
+reverse (l1 @ l2) @ [hd] = ((reverse l2) @ (reverse l1)) @ [hd], adding hd to both sides
+reverse (hd :: (l1 @ l2)) = (reverse l2) @ ((reverse l1) @ [hd]), by the definition of reverse
+reverse ((hd::l1) @ l2) = (reverse l2) @ (reverse (hd::l1)), by the definition of reverse
+reverse (append (hd::l1) l2) = append (reverse l2) (reverse (hd::l1)), by property [1]
+
+∴ reverse (append l1 l2) = append (reverse l2) (reverse l1)
+
+* Editor's note: I was using (l1 @ l2) mainly as syntactical sugar for (append l1 l2) because
+  ultimately I just turned it back into append; I didn't use any special property of @ that
+  didn't apply to append, so you could probably totally just read through the whole proof
+  substituting (l1 @ l2) with (append l1 l2) in your head.
+
+
+
+  ~.* Question 6 *.~
+
+let rec place e l =
+  match l with
+  | [ ] -> [e]
+  | x::xs ->
+    if e < x then e::x::xs
+    else x :: (place e xs)
+
+let rec is_elem e l =
+  match l with
+  | [ ] -> false
+  | x::xs -> e = x || (e > x && is_elem e xs)
+
+let rec sorted l =
+  match l with
+  | [ ] -> true
+  | x::[] -> true
+  | x1::x2::xs -> x1 <= x2 && sorted (x2::xs)
+
+Prove that:
+  sorted l => sorted (place e l)
+

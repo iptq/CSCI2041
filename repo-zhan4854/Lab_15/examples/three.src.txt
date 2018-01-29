@@ -1,0 +1,7 @@
+function times2(x : int) =
+    x * 2;
+
+function times2_array(arr : int[]) =
+    map(times2, arr);
+
+times2_array([1, 2, 3, 4])
